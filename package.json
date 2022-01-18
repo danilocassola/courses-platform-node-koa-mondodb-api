@@ -1,0 +1,45 @@
+{
+  "name": "courses-platform",
+  "version": "1.0.0",
+  "description": "Hello Node",
+  "author": "Danilo Cassola <danilocassola@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/danilocassola/courses-platform-node-koa-mondodb-api#readme",
+  "keywords": [
+    "node"
+  ],
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danilocassola/courses-platform-node-koa-mondodb-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danilocassola/courses-platform-node-koa-mondodb-api/issues"
+  },
+  "scripts": {
+    "lint": "eslint src/**/*.js",
+    "start": "nodemon src/index.js"
+  },
+  "devDependencies": {
+    "eslint": "8.5.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-prettier": "4.0.0",
+    "nodemon": "2.0.15",
+    "prettier": "2.5.1"
+  },
+  "private": true,
+  "dependencies": {
+    "dotenv": "14.1.0",
+    "esm": "3.2.25",
+    "koa": "2.13.4",
+    "koa-bodyparser": "4.3.0",
+    "koa-json": "2.0.2",
+    "koa-router": "10.1.1",
+    "mongoose": "6.1.7"
+  }
+}
