@@ -25,20 +25,21 @@ const login = async (ctx, next) => {
 
   try {
     const user = await User.findOne({ username });
+    if (!user) {
+      throw new Error('User not found');
+    }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      ctx.status = 401;
-      ctx.body = { message: 'Invalid passoword' };
-      return;
+      throw new Error('Invalid password');
     }
 
     ctx.status = 201;
     ctx.body = { message: 'Logged in!' };
     ctx.state.userId = user.id;
   } catch (err) {
-    ctx.body = { message: 'User not found' };
+    ctx.body = { message: err.message };
     ctx.status = 500;
   }
   await next();
