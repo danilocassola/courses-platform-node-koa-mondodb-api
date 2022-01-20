@@ -1,7 +1,4 @@
 import bcrypt from 'bcryptjs/dist/bcrypt';
-import jwt from 'jsonwebtoken';
-import config from '../config';
-
 import User from '../user/user.model';
 
 // Signup user
@@ -17,12 +14,18 @@ const signup = async (ctx, next) => {
     await user.save();
     ctx.status = 201;
     ctx.state.userId = user.id;
+
+    await next();
+
+    ctx.body = {
+      message: 'User has been created.',
+      token: ctx.state.token,
+      userId: user.id,
+    };
   } catch (err) {
     ctx.status = 500;
     ctx.body = { message: err.message };
   }
-
-  await next();
 };
 
 // Login user
@@ -44,25 +47,21 @@ const login = async (ctx, next) => {
       throw new Error('Invalid password');
     }
 
-    // Token JWT
-    const payload = {
-      id: user.id,
-      isAdmin: user.isAdmin,
-    };
-    const authToken = jwt.sign(payload, config.JWT_SECRET, { expiresIn: '1d' });
-
-    ctx.status = 200;
-    ctx.body = { message: 'Logged in!', token: authToken, userId: user.id };
-    ctx.append('token', authToken);
-
     ctx.state.userId = user.id;
+
+    await next();
+
+    ctx.body = {
+      message: 'Logged in!',
+      token: ctx.state.token,
+      userId: user.id,
+    };
   } catch (err) {
     ctx.body = { message: err.message };
     if (!ctx.status) {
       ctx.status = 500;
     }
   }
-  await next();
 };
 
 export { signup, login };
