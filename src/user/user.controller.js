@@ -41,8 +41,11 @@ const update = async (ctx) => {
       { new: true }
     );
 
+    // Password is not sending back
+    const { password, ...others } = user._doc;
+
     ctx.status = 200;
-    ctx.body = user;
+    ctx.body = others;
   } catch (err) {
     ctx.status = 500;
     ctx.body = { message: err.message };
