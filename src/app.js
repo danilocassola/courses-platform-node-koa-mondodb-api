@@ -8,6 +8,8 @@ import './database';
 
 const app = new Koa();
 
+// app.context.errStatus = 200;
+
 app.use(json());
 app.use(bodyParser());
 app.use(router.routes()).use(router.allowedMethods());
