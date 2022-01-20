@@ -1,7 +1,6 @@
 import User from './user.model';
 
 const check = async (ctx, next) => {
-  // const check = async (id) => {
   const { id } = ctx.params;
 
   try {
@@ -19,15 +18,40 @@ const check = async (ctx, next) => {
 };
 
 const list = async (ctx) => {
-  ctx.body = { message: 'Users Route' };
+  try {
+    const users = await User.find();
+    if (!users) {
+      throw new Error('There are no users');
+    }
+
+    // Password will not sending back
+    const usersFiltered = users.map((user) => {
+      const { password, ...others } = user._doc;
+      return others;
+    });
+
+    ctx.status = 200;
+    ctx.body = usersFiltered;
+  } catch (err) {
+    ctx.status = 500;
+    ctx.body = { message: err.message };
+  }
 };
 
-const profile = async (ctx) => {
-  const id = ctx.state.userId;
-  const user = await User.findById(id);
-  const { password, ...others } = user._doc;
+const view = async (ctx) => {
+  const { id } = ctx.params;
 
-  ctx.body = others;
+  try {
+    const user = await User.findById(id);
+
+    // Password will not sending back
+    const { password, ...others } = user._doc;
+
+    ctx.body = others;
+  } catch (err) {
+    ctx.status = 404;
+    ctx.body = { message: err.message };
+  }
 };
 
 const update = async (ctx) => {
@@ -41,7 +65,7 @@ const update = async (ctx) => {
       { new: true }
     );
 
-    // Password is not sending back
+    // Password will not sending back
     const { password, ...others } = user._doc;
 
     ctx.status = 200;
@@ -65,4 +89,4 @@ const remove = async (ctx) => {
   }
 };
 
-export { check, list, profile, update, remove };
+export { check, list, view, update, remove };

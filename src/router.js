@@ -1,14 +1,13 @@
 import Router from 'koa-router';
-import 'dotenv/config';
 import userRouter from './user/user.router';
 import authRouter from './auth/auth.router';
-import config from './config';
+import 'dotenv/config';
 
 const router = new Router();
 
 router.get('/', async (ctx) => {
   ctx.body = {
-    info: `Course Platform Server${config.DATABASE}`,
+    info: `Courses Platform Server`,
     datetime: new Date(),
   };
 });
