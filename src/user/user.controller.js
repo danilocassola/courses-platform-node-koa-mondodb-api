@@ -1,19 +1,20 @@
 import User from './user.model';
 
 const check = async (ctx, next) => {
+  // const check = async (id) => {
   const { id } = ctx.params;
 
-  const user = await User.findById(id);
-
-  if (!user) {
-    try {
+  try {
+    const user = await User.findById(id);
+    if (!user) {
       ctx.status = 404;
       throw new Error('User not found');
-    } catch (err) {
-      ctx.body = { message: err.message };
     }
-  } else {
+
     await next();
+  } catch (err) {
+    ctx.status = 404;
+    ctx.body = { message: err.message };
   }
 };
 
@@ -30,7 +31,22 @@ const profile = async (ctx) => {
 };
 
 const update = async (ctx) => {
-  ctx.body = { message: 'User Route Update' };
+  const { id } = ctx.params;
+  const { username, email } = ctx.request.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      { username, email },
+      { new: true }
+    );
+
+    ctx.status = 200;
+    ctx.body = user;
+  } catch (err) {
+    ctx.status = 500;
+    ctx.body = { message: err.message };
+  }
 };
 
 const remove = async (ctx) => {
