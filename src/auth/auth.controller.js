@@ -8,7 +8,9 @@ import User from '../user/user.model';
 const signup = async (ctx, next) => {
   const { username, email, password } = ctx.request.body;
 
+  // Hash password
   const hashedPassword = await bcrypt.hash(password, 10);
+
   const user = new User({ username, email, password: hashedPassword });
 
   try {
@@ -31,7 +33,6 @@ const login = async (ctx, next) => {
     const user = await User.findOne({ username });
 
     if (!user) {
-      // ctx.errStatus = 404;
       ctx.status = 404;
       throw new Error('User not found');
     }
@@ -43,7 +44,7 @@ const login = async (ctx, next) => {
       throw new Error('Invalid password');
     }
 
-    // Token
+    // Token JWT
     const payload = {
       id: user.id,
       isAdmin: user.isAdmin,

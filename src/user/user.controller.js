@@ -1,5 +1,6 @@
 import User from './user.model';
 
+// Check if the user exists
 const check = async (ctx, next) => {
   const { id } = ctx.params;
 
@@ -17,6 +18,7 @@ const check = async (ctx, next) => {
   }
 };
 
+// Get all users
 const list = async (ctx) => {
   try {
     const users = await User.find();
@@ -38,6 +40,7 @@ const list = async (ctx) => {
   }
 };
 
+// Get user
 const view = async (ctx) => {
   const { id } = ctx.params;
 
@@ -54,6 +57,7 @@ const view = async (ctx) => {
   }
 };
 
+// Uptade user
 const update = async (ctx) => {
   const { id } = ctx.params;
   const { username, email } = ctx.request.body;
@@ -76,6 +80,7 @@ const update = async (ctx) => {
   }
 };
 
+// Delete user
 const remove = async (ctx) => {
   const { id } = ctx.params;
 
