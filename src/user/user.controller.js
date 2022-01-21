@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs/dist/bcrypt';
 import User from './user.model';
 
 // Check if the user exists
@@ -80,6 +81,29 @@ const update = async (ctx) => {
   }
 };
 
+// Change password
+const changePassword = async (ctx) => {
+  const { id } = ctx.params;
+  const { password } = ctx.request.body;
+
+  // Hash password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    await User.findByIdAndUpdate(
+      id,
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    ctx.status = 200;
+    ctx.body = { message: 'Password has been changed.' };
+  } catch (err) {
+    ctx.status = 500;
+    ctx.body = { message: err.message };
+  }
+};
+
 // Delete user
 const remove = async (ctx) => {
   const { id } = ctx.params;
@@ -94,4 +118,4 @@ const remove = async (ctx) => {
   }
 };
 
-export { check, list, view, update, remove };
+export { check, list, view, update, changePassword, remove };
