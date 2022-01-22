@@ -20,7 +20,7 @@ const moduleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  lessons: [lessonSchema],
+  lesson: mongoose.ObjectId,
 });
 
 const courseSchema = new mongoose.Schema(
@@ -41,7 +41,7 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    modules: [moduleSchema],
+    module: mongoose.ObjectId,
   },
   { timestamps: true }
 );
