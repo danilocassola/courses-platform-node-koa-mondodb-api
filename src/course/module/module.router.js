@@ -1,16 +1,24 @@
 import KoaRouter from 'koa-router';
 import verifyToken from '../../auth/verifyToken';
 import { authAdmin } from '../../auth/authorization';
-// import { check, create, view, update, remove } from './module.controller';
-import { create } from './module.controller';
+import { check } from '../course.controller';
+import {
+  checkMod,
+  viewMod,
+  createMod,
+  updateMod,
+  delMod,
+} from './module.controller';
 
 const router = new KoaRouter({
-  prefix: '/api/courses/module',
+  prefix: '/api/courses/:id',
 });
 
-// router.get('/:id', check, view);
-router.post('/', verifyToken, authAdmin, create);
-// router.put('/:id', check, verifyToken, authAdmin, update);
-// router.delete('/:id', check, verifyToken, authAdmin, remove);
+router.use(check);
+
+router.get('/:modId', checkMod, viewMod);
+router.put('/:module', createMod, verifyToken, authAdmin);
+router.put('/:modId', checkMod, verifyToken, authAdmin, updateMod);
+router.delete('/:modId', checkMod, verifyToken, authAdmin, delMod);
 
 export default router;
