@@ -51,15 +51,8 @@ const list = async (ctx) => {
 // Get course
 const view = async (ctx) => {
   const { id } = ctx.params;
-
-  try {
-    const course = await Course.findById(id);
-
-    ctx.body = course;
-  } catch (err) {
-    ctx.status = 404;
-    ctx.body = { message: err.message };
-  }
+  const course = await Course.findById(id);
+  ctx.body = course;
 };
 
 // Uptade course

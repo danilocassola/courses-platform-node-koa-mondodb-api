@@ -1,25 +1,26 @@
 import Course from './course.model';
 
 // Check if the module exists
-// const checkModule = async (ctx, next) => {
-//   const { id } = ctx.params;
+const checkMod = async (ctx, next) => {
+  const { id, modId } = ctx.params;
+  const course = await Course.findById(id);
+  try {
+    const module = course.modules.id(modId);
 
-//   try {
-//     const course = await Course.findById(id);
-//     if (!course) {
-//       ctx.status = 404;
-//       throw new Error('Course not found');
-//     }
+    if (!module) {
+      ctx.status = 404;
+      throw new Error('Module not found');
+    }
 
-//     await next();
-//   } catch (err) {
-//     ctx.status = 404;
-//     ctx.body = { message: err.message };
-//   }
-// };
+    await next();
+  } catch (err) {
+    ctx.status = 404;
+    ctx.body = { message: err.message };
+  }
+};
 
 // Create new module
-const createModule = async (ctx) => {
+const createMod = async (ctx) => {
   const { id } = ctx.params;
   const course = await Course.findById(id);
 
@@ -34,69 +35,43 @@ const createModule = async (ctx) => {
   }
 };
 
-// // Get all courses
-// const list = async (ctx) => {
-//   try {
-//     const courses = await Course.find();
-//     if (!courses) {
-//       throw new Error('There are no courses');
-//     }
+// Get module
+const viewMod = async (ctx) => {
+  const { id, modId } = ctx.params;
+  const course = await Course.findById(id);
+  const module = course.modules.id(modId);
 
-//     ctx.status = 200;
-//     ctx.body = courses;
-//   } catch (err) {
-//     ctx.status = 500;
-//     ctx.body = { message: err.message };
-//   }
-// };
+  ctx.status = 200;
+  ctx.body = module;
+};
 
-// // Get course
-// const view = async (ctx) => {
-//   const { id } = ctx.params;
+// Uptade course
+const updateMod = async (ctx) => {
+  const { id, modId } = ctx.params;
+  const { name } = ctx.request.body;
 
-//   try {
-//     const course = await Course.findById(id);
+  const course = await Course.findById(id);
+  const module = course.modules.id(modId);
 
-//     ctx.body = course;
-//   } catch (err) {
-//     ctx.status = 404;
-//     ctx.body = { message: err.message };
-//   }
-// };
+  module.name = name;
+  await course.save();
 
-// // Uptade course
-// const update = async (ctx) => {
-//   const { id } = ctx.params;
-//   const { name, description, videoUrl, imageUrl } = ctx.request.body;
+  ctx.status = 200;
+  ctx.body = module;
+};
 
-//   try {
-//     const course = await Course.findByIdAndUpdate(
-//       id,
-//       { name, description, videoUrl, imageUrl },
-//       { new: true }
-//     );
+// Delete course
+const delMod = async (ctx) => {
+  const { id, modId } = ctx.params;
 
-//     ctx.status = 200;
-//     ctx.body = course;
-//   } catch (err) {
-//     ctx.status = 500;
-//     ctx.body = { message: err.message };
-//   }
-// };
+  try {
+    await Course.findByIdAndUpdate(id, { $pull: { modules: { _id: modId } } });
+    ctx.status = 200;
+    ctx.body = { message: 'Course has been deleted.' };
+  } catch (err) {
+    ctx.status = 500;
+    ctx.body = { message: err.message };
+  }
+};
 
-// // Delete course
-// const remove = async (ctx) => {
-//   const { id } = ctx.params;
-
-//   try {
-//     await Course.findByIdAndDelete(id);
-//     ctx.status = 200;
-//     ctx.body = { message: 'Course has been deleted.' };
-//   } catch (err) {
-//     ctx.status = 500;
-//     ctx.body = { message: err.message };
-//   }
-// };
-
-// export { check, list, create, view, update, remove };
-export { createModule };
+export { checkMod, viewMod, createMod, updateMod, delMod };
