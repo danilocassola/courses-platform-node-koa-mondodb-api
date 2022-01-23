@@ -47,13 +47,15 @@ JWT_SECRET = somethingsomething
 
 ### User routes
 
-| Method | Endpoint                  | Description          |
-| ------ | ------------------------- | -------------------- |
-| GET    | `/api/users`              | Get all users        |
-| GET    | `/api/users/:id`          | Get user             |
-| PUT    | `/api/users/:id`          | Update user          |
-| DELETE | `/api/users/:id`          | Delete user          |
-| PUT    | `/api/users/password/:id` | Chande user password |
+| Method | Endpoint                   | Description          |
+| ------ | -------------------------- | -------------------- |
+| GET    | `/api/users`               | Get all users        |
+| GET    | `/api/users/:id`           | Get user             |
+| PUT    | `/api/users/:id`           | Update user          |
+| DELETE | `/api/users/:id`           | Delete user          |
+| PUT    | `/api/users/password/:id`  | Chande user password |
+| PUT    | `/api/users/:id/:courseId` | To enroll user       |
+| DELETE | `/api/users/:id/:courseId` | To cancel enroll     |
 
 <br />
 

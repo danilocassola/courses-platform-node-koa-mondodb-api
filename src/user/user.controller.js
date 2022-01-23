@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs/dist/bcrypt';
 import User from './user.model';
+import Course from '../course/course.model';
 
 // Check if the user exists
 const check = async (ctx, next) => {
@@ -44,18 +45,12 @@ const list = async (ctx) => {
 // Get user
 const view = async (ctx) => {
   const { id } = ctx.params;
+  const user = await User.findById(id);
 
-  try {
-    const user = await User.findById(id);
+  // Password will not sending back
+  const { password, ...others } = user._doc;
 
-    // Password will not sending back
-    const { password, ...others } = user._doc;
-
-    ctx.body = others;
-  } catch (err) {
-    ctx.status = 404;
-    ctx.body = { message: err.message };
-  }
+  ctx.body = others;
 };
 
 // Uptade user
@@ -118,4 +113,53 @@ const remove = async (ctx) => {
   }
 };
 
-export { check, list, view, update, changePassword, remove };
+// Enrrol
+const enroll = async (ctx) => {
+  const { id, courseId } = ctx.params;
+  const user = await User.findById(id);
+
+  try {
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      ctx.status = 404;
+      throw new Error('Course not found');
+    }
+
+    user.enrolled.push(course);
+    await user.save();
+
+    ctx.status = 200;
+    ctx.body = { message: 'Enrolled' };
+  } catch (err) {
+    ctx.body = { message: err.message };
+  }
+};
+
+// Cancel enrrol
+const cancelEnroll = async (ctx) => {
+  const { id, courseId } = ctx.params;
+
+  try {
+    await User.findByIdAndUpdate(id, {
+      $pull: { enrolled: courseId },
+    });
+
+    ctx.status = 200;
+    ctx.body = { message: 'Enroll canceled' };
+  } catch (err) {
+    ctx.status = 500;
+    ctx.body = { message: err.message };
+  }
+};
+
+export {
+  check,
+  list,
+  view,
+  update,
+  changePassword,
+  remove,
+  enroll,
+  cancelEnroll,
+};
