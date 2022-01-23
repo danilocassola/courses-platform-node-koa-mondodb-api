@@ -27,7 +27,7 @@ $ npm install
 
 ```yaml
 # .env file
-DATABASE = <replace to your monngoose url>
+DATABASE = <replace to your MongoDB url>
 PORT = 3000
 JWT_SECRET = somethingsomething
 ```
