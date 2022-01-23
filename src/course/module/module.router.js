@@ -4,10 +4,10 @@ import { authAdmin } from '../../auth/authorization';
 import { check } from '../course.controller';
 import {
   checkMod,
-  viewMod,
-  createMod,
-  updateMod,
-  delMod,
+  viewModule,
+  createModule,
+  updateModule,
+  deleteModule,
 } from './module.controller';
 
 const router = new KoaRouter({
@@ -16,9 +16,9 @@ const router = new KoaRouter({
 
 router.use(check);
 
-router.get('/:modId', checkMod, viewMod);
-router.put('/:module', createMod, verifyToken, authAdmin);
-router.put('/:modId', checkMod, verifyToken, authAdmin, updateMod);
-router.delete('/:modId', checkMod, verifyToken, authAdmin, delMod);
+router.get('/:modId', checkMod, viewModule);
+router.put('/module', verifyToken, authAdmin, createModule);
+router.put('/:modId', checkMod, verifyToken, authAdmin, updateModule);
+router.delete('/:modId', checkMod, verifyToken, authAdmin, deleteModule);
 
 export default router;

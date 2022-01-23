@@ -20,7 +20,7 @@ const checkMod = async (ctx, next) => {
 };
 
 // Create new module
-const createMod = async (ctx) => {
+const createModule = async (ctx) => {
   const { id } = ctx.params;
   const course = await Course.findById(id);
 
@@ -36,7 +36,7 @@ const createMod = async (ctx) => {
 };
 
 // Get module
-const viewMod = async (ctx) => {
+const viewModule = async (ctx) => {
   const { id, modId } = ctx.params;
   const course = await Course.findById(id);
   const module = course.modules.id(modId);
@@ -46,7 +46,7 @@ const viewMod = async (ctx) => {
 };
 
 // Uptade module
-const updateMod = async (ctx) => {
+const updateModule = async (ctx) => {
   const { id, modId } = ctx.params;
   const { name } = ctx.request.body;
 
@@ -66,7 +66,7 @@ const updateMod = async (ctx) => {
 };
 
 // Delete module
-const delMod = async (ctx) => {
+const deleteModule = async (ctx) => {
   const { id, modId } = ctx.params;
 
   try {
@@ -79,4 +79,4 @@ const delMod = async (ctx) => {
   }
 };
 
-export { checkMod, viewMod, createMod, updateMod, delMod };
+export { checkMod, viewModule, createModule, updateModule, deleteModule };
