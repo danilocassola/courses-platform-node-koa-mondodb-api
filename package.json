@@ -1,7 +1,7 @@
 {
   "name": "courses-platform",
   "version": "1.0.0",
-  "description": "Hello Node",
+  "description": "Project with NodeJS, KoaJS and MongoDB.",
   "author": "Danilo Cassola <danilocassola@gmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/danilocassola/courses-platform-node-koa-mondodb-api#readme",
